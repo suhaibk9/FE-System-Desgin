@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Webhook Simulator</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        padding: 20px;
+        background: #111827;
+        color: #f3f4f6;
+      }
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #3b82f6;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+      }
+      button:hover {
+        background-color: #2563eb;
+      }
+      #status {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: #1f2937;
+        border-radius: 5px;
+        border: 1px solid #374151;
+        font-family: monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Webhook Simulator</h1>
+    <p>
+      Webhooks are typically server-to-server. This page acts as a "third-party
+      service" (like Stripe or GitHub) triggering an event to post to our
+      backend webhook endpoint.
+    </p>
+
+    <button id="triggerBtn">Trigger Webhook Event</button>
+    <div id="status">Waiting for action...</div>
+
+    <script>
+      const triggerBtn = document.getElementById("triggerBtn");
+      const statusDiv = document.getElementById("status");
+
+      triggerBtn.addEventListener("click", async () => {
+        statusDiv.innerHTML = "Triggering webhook...";
+
+        // Simulating the payload a service might send:
+        const payload = {
+          event: "payment_success",
+          transactionId: "txn_987654321",
+          amount: 99.99,
+          currency: "USD",
+        };
+
+        try {
+          const res = await fetch("http://localhost:3002/webhook", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+          });
+
+          const text = await res.text();
+          statusDiv.innerHTML = `
+            <div><strong>Status:</strong> ${res.status}</div>
+            <div><strong>Server Response:</strong> ${text}</div>
+            <br/>
+            <small>Check your terminal to see the logged req.body payload!</small>
+          `;
+        } catch (err) {
+          statusDiv.innerHTML = `<span style="color: #ef4444">Error: ${err.message}. (Did you forget to allow CORS?)</span>`;
+        }
+      });
+    </script>
+  </body>
+</html>
