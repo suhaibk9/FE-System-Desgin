@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="currentData"></div>
+    <script>
+      const getData = async () => {
+        const res = await fetch("http://localhost:3000/data");
+        const json = await res.json();
+        document.querySelector("#currentData").innerHTML = json.msg;
+      };
+      const poll = async () => {
+        await getData();
+        setTimeout(poll, 5000);
+      };
+      poll();
+    </script>
+  </body>
+</html>
