@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nonce Demo</title>
+  </head>
+  <body>
+    <script nonce="{{nonce}}">
+      console.log("✅ Trusted Script: I am running!");
+    </script>
+
+    <script>
+      console.log("❌ Non Trusted Script: I should be blocked!");
+    </script>
+    
+    <h1>Hi Bro!</h1>
+  </body>
+</html>
