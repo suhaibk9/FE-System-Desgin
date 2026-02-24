@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h1>✖️ Super Math Solver ➗</h1>
+    <h2 id="result">Calculating...</h2>
+
+    <script nonce="{{nonce}}">
+        // 1. Get the 'math' parameter from the URL
+        const params = new URLSearchParams(window.location.search);
+        const formula = params.get("math");
+
+        if (formula) {
+            console.log("Solving:", formula);
+            
+            // 💀 SNEAKY EVAL: "It's just math, right?"
+            try {
+                const answer = eval(formula); 
+                document.getElementById("result").innerText = "Answer: " + answer;
+            } catch (e) {
+                console.error("Math error", e);
+            }
+        }
+    </script>
+</body>
+</html>
+
+You can run it by doing : http://localhost:3002/?math=10+10
