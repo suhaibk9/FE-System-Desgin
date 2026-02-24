@@ -23,7 +23,6 @@ app.get("/updateData", (req, res) => {
     });
   });
   requestList = [];
-  
 });
 app.listen(3000, (req, res) => {
   console.log("Listening on Port 3000");
