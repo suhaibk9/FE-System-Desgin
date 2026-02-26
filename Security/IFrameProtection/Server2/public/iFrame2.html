@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Malicious Code</h1>
+    <script>
+      alert("Hi");
+      window.onload = () => {
+        try {
+          const parent = window.parent;
+          const parentDocument = window.parentDocument;
+          //Attempt to read HTML
+          const stolenData = parentDocument.innerHTML;
+          console.log("stolenData : " + stolenData);
+          alert("stolenData : " + stolenData);
+        } catch (err) {
+          console.error("data theft failed: " + err);
+        }
+      };
+    </script>
+  </body>
+</html>
+
+So moredern browser don't allow this reading of JS from differnet origin frame. You cannot access DOM from cross origin.
+const parent = window.parent; this will give undefined. Some super old browser will allow 
