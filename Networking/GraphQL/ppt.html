@@ -1,0 +1,831 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GraphQL</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        background: #f5f5f5;
+        font-family: "Inter", sans-serif;
+        color: #1a1a1a;
+        overflow: hidden;
+      }
+
+      #deck {
+        width: 100vw;
+        height: 100vh;
+        position: relative;
+      }
+
+      .slide {
+        position: absolute;
+        inset: 0;
+        background: #fff;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        padding: 72px 100px;
+        opacity: 0;
+        transform: translateX(30px);
+        transition:
+          opacity 0.3s ease,
+          transform 0.3s ease;
+        pointer-events: none;
+      }
+      .slide.center {
+        align-items: center;
+        text-align: center;
+      }
+      .slide.active {
+        opacity: 1;
+        transform: translateX(0);
+        pointer-events: all;
+      }
+      .slide.exit {
+        opacity: 0;
+        transform: translateX(-30px);
+      }
+
+      /* left accent bar */
+      .slide .bar {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 5px;
+        background: #6366f1;
+      }
+      .slide.center .bar {
+        display: none;
+      }
+
+      /* title slide accent */
+      .slide.title-slide .bar {
+        display: block;
+        width: 100%;
+        height: 5px;
+        top: 0;
+        bottom: auto;
+        left: 0;
+        right: 0;
+      }
+
+      h1 {
+        font-size: clamp(2.4rem, 5vw, 4.2rem);
+        font-weight: 800;
+        line-height: 1.1;
+        color: #111;
+        margin-bottom: 18px;
+      }
+      h1 span {
+        color: #6366f1;
+      }
+      h2 {
+        font-size: clamp(1.6rem, 2.8vw, 2.2rem);
+        font-weight: 700;
+        color: #111;
+        margin-bottom: 8px;
+      }
+      .sub {
+        font-size: clamp(0.9rem, 1.3vw, 1.05rem);
+        color: #555;
+        line-height: 1.75;
+        max-width: 680px;
+      }
+
+      /* section label */
+      .label {
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #999;
+        margin-bottom: 16px;
+      }
+
+      /* ── TWO-COL ── */
+      .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+        margin-top: 28px;
+        width: 100%;
+      }
+      .panel {
+        background: #f9f9f9;
+        border: 1px solid #e5e5e5;
+        border-radius: 8px;
+        padding: 28px;
+        display: flex;
+        flex-direction: column;
+      }
+      .panel-label {
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #999;
+        margin-bottom: 14px;
+      }
+
+      /* ── CODE ── */
+      pre.code {
+        font-family: "JetBrains Mono", monospace;
+        font-size: clamp(0.7rem, 0.9vw, 0.84rem);
+        line-height: 1.8;
+        color: #222;
+        white-space: pre;
+        tab-size: 2;
+        flex: 1;
+        overflow: auto;
+        background: transparent;
+      }
+
+      /* ── FOUR-GRID ── */
+      .four-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        gap: 20px;
+        margin-top: 28px;
+        width: 100%;
+      }
+
+      /* ── LIST ── */
+      .plain-list {
+        list-style: none;
+        margin-top: 24px;
+        width: 100%;
+      }
+      .plain-list li {
+        padding: 10px 0;
+        border-bottom: 1px solid #eee;
+        font-size: 0.95rem;
+        color: #444;
+        font-family: "JetBrains Mono", monospace;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .plain-list li:last-child {
+        border-bottom: none;
+      }
+      .plain-list li::before {
+        content: "—";
+        color: #bbb;
+        flex-shrink: 0;
+      }
+
+      /* ── ENDPOINT LIST ── */
+      .ep-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 24px;
+        width: 100%;
+      }
+      .ep {
+        padding: 10px 16px;
+        border: 1px solid #e5e5e5;
+        border-radius: 6px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.82rem;
+        color: #444;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: #fafafa;
+      }
+      .method {
+        font-size: 0.68rem;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 4px;
+        flex-shrink: 0;
+      }
+      .get {
+        background: #dcfce7;
+        color: #166534;
+      }
+      .post {
+        background: #fef3c7;
+        color: #92400e;
+      }
+
+      /* ── COMPARISON TABLE ── */
+      table.cmp {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.9rem;
+        margin-top: 28px;
+      }
+      .cmp th {
+        text-align: left;
+        padding: 10px 20px;
+        background: #f0f0f0;
+        font-size: 0.72rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #777;
+      }
+      .cmp td {
+        padding: 12px 20px;
+        border-bottom: 1px solid #eee;
+        vertical-align: top;
+      }
+      .cmp tr:last-child td {
+        border-bottom: none;
+      }
+      .cmp td:first-child {
+        color: #999;
+        width: 22%;
+        font-weight: 500;
+      }
+      .cmp td:nth-child(3) {
+        color: #16a34a;
+      }
+
+      /* ── CARDS (simple, no icons) ── */
+      .cards {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-top: 28px;
+        width: 100%;
+      }
+      .card {
+        background: #fafafa;
+        border: 1px solid #e5e5e5;
+        border-radius: 8px;
+        padding: 24px 28px;
+      }
+      .card h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #111;
+        margin-bottom: 8px;
+      }
+      .card p {
+        font-size: 0.88rem;
+        color: #555;
+        line-height: 1.65;
+      }
+
+      /* ── PILL LIST (summary) ── */
+      .pills {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-top: 28px;
+        width: 100%;
+        max-width: 600px;
+      }
+      .pill {
+        padding: 12px 20px;
+        border: 1px solid #e5e5e5;
+        border-radius: 6px;
+        font-size: 0.92rem;
+        color: #333;
+        background: #fafafa;
+      }
+
+      /* ── NAV ── */
+      #bar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        height: 3px;
+        background: #6366f1;
+        transition: width 0.3s ease;
+        z-index: 100;
+      }
+      #count {
+        position: fixed;
+        bottom: 16px;
+        right: 24px;
+        font-size: 0.7rem;
+        color: #aaa;
+        font-family: "JetBrains Mono", monospace;
+        z-index: 100;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="bar"></div>
+    <div id="count"></div>
+
+    <div id="deck">
+      <!-- 1. TITLE -->
+      <div class="slide center title-slide active">
+        <div class="bar"></div>
+        <h1><span>GraphQL</span></h1>
+        <p class="sub">
+          A query language for your API — and a simpler way to think about data
+          fetching.
+        </p>
+      </div>
+
+      <!-- 2. REST LIMITATIONS -->
+      <div class="slide">
+        <div class="bar"></div>
+        <div class="label">Context</div>
+        <h2>Some Limitations of REST</h2>
+        <p class="sub">
+          REST works well — but as UIs get more complex, a few patterns start to
+          feel limiting.
+        </p>
+        <div class="cards">
+          <div class="card">
+            <h3>Over-fetching</h3>
+            <p>
+              The server returns a fixed shape. You needed 3 fields — you got
+              30. Extra data gets ignored.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Under-fetching</h3>
+            <p>
+              One request isn't enough. You hit /user, then /posts, then
+              /comments — multiple round trips for one screen.
+            </p>
+          </div>
+          <div class="card">
+            <h3>No enforced contract</h3>
+            <p>
+              The response shape is implicit — you find out at runtime if
+              something changed on the server.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Endpoint growth</h3>
+            <p>
+              Every new UI variation often means a new endpoint or query param.
+              APIs slowly sprawl over time.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. BOOKS EXAMPLE -->
+      <div class="slide">
+        <div class="bar"></div>
+        <div class="label">Example 1 — Books & Authors</div>
+        <h2>How many endpoints do you need?</h2>
+        <p class="sub">
+          Say you're building a site that shows Books, Authors, and their
+          relationships.
+        </p>
+        <div class="two-col">
+          <div class="panel">
+            <div class="panel-label">With REST</div>
+            <ul class="plain-list" style="margin-top: 0">
+              <li>GET /books</li>
+              <li>GET /authors</li>
+              <li>GET /books/:id/author</li>
+              <li>GET /authors/:id/books</li>
+              <li>GET /books?include=author</li>
+              <li>GET /authors?include=books</li>
+              <li>GET /books/:id?fields=title,author</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <div class="panel-label">
+              With GraphQL — one endpoint, any shape
+            </div>
+            <pre class="code" id="code-books-q"></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. BLOG EXAMPLE -->
+      <div class="slide">
+        <div class="bar"></div>
+        <div class="label">Example 2 — Blog</div>
+        <h2>Users · Posts · Comments</h2>
+        <p class="sub">
+          A typical blog combines Users, Posts, and Comments. Every new
+          combination needs a new REST endpoint — vs. one GraphQL query.
+        </p>
+        <div class="two-col" style="margin-top: 20px; align-items: start">
+          <div class="panel">
+            <div class="panel-label">REST — endpoint sprawl</div>
+            <div class="ep-list" style="margin-top: 0">
+              <div class="ep"><span class="method get">GET</span>/users</div>
+              <div class="ep">
+                <span class="method get">GET</span>/users/:id/posts
+              </div>
+              <div class="ep">
+                <span class="method get">GET</span>/posts/:id/comments
+              </div>
+              <div class="ep">
+                <span class="method get">GET</span
+                >/users/:id/posts?include=comments
+              </div>
+              <div class="ep">
+                <span class="method get">GET</span
+                >/posts?userId=123&amp;include=author,comments
+              </div>
+              <div class="ep"><span class="method post">POST</span>/posts</div>
+              <div class="ep">
+                <span class="method post">POST</span>/posts/:id/comments
+              </div>
+            </div>
+          </div>
+          <div
+            class="panel"
+            style="
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+            "
+          >
+            <div class="panel-label" style="align-self: flex-start">
+              GraphQL — single query, multiple resources
+            </div>
+            <img
+              src="rest-vs-graphql.png"
+              alt="REST vs GraphQL diagram"
+              style="width: 100%; border-radius: 6px"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. GRAPHQL SOLUTION -->
+      <div class="slide">
+        <div class="bar"></div>
+        <div class="label">Enter GraphQL</div>
+        <h2>One endpoint. You define the shape.</h2>
+        <p class="sub">
+          With GraphQL the client asks for exactly the data it needs. The server
+          resolves it — no more, no less.
+        </p>
+        <div class="cards">
+          <div class="card">
+            <h3>Ask for exactly what you need</h3>
+            <p>
+              The response shape mirrors your query — no wasted fields, no extra
+              requests.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Single endpoint</h3>
+            <p>
+              POST /graphql handles everything. No more endpoint sprawl across
+              your codebase.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Schema as a contract</h3>
+            <p>
+              Every field has a declared type. Queries are validated before they
+              run — issues surface early.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Nested data in one request</h3>
+            <p>
+              Books with their Authors with their other Books — resolved in a
+              single query, not multiple round trips.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. COMPARISON -->
+      <div class="slide">
+        <div class="bar"></div>
+        <div class="label">Comparison</div>
+        <h2>REST and GraphQL, side by side</h2>
+        <table class="cmp">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>REST</th>
+              <th>GraphQL</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Endpoints</td>
+              <td>One per resource / operation</td>
+              <td>Single endpoint</td>
+            </tr>
+            <tr>
+              <td>Response shape</td>
+              <td>Fixed by the server</td>
+              <td>Defined by the client query</td>
+            </tr>
+            <tr>
+              <td>Type safety</td>
+              <td>Optional (OpenAPI / Swagger)</td>
+              <td>Built-in schema</td>
+            </tr>
+            <tr>
+              <td>Related data</td>
+              <td>Multiple requests</td>
+              <td>One nested query</td>
+            </tr>
+            <tr>
+              <td>Versioning</td>
+              <td>URL versions (v1, v2…)</td>
+              <td>Deprecate fields, evolve schema</td>
+            </tr>
+            <tr>
+              <td>Discoverability</td>
+              <td>Manual docs / Swagger</td>
+              <td>Auto-introspection, GraphiQL</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 7. HOW IT WORKS -->
+      <div class="slide">
+        <div class="bar"></div>
+        <div class="label">How it works</div>
+        <h2>Schema + Resolvers</h2>
+        <div class="two-col">
+          <div class="panel">
+            <div class="panel-label">typeDefs — the contract</div>
+            <pre class="code" id="code-typedefs"></pre>
+          </div>
+          <div class="panel">
+            <div class="panel-label">resolvers — the logic</div>
+            <pre class="code" id="code-resolvers"></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7b. APOLLO SERVER -->
+      <div class="slide">
+        <div class="bar"></div>
+        <div class="label">In Practice</div>
+        <h2>Apollo Server</h2>
+        <p class="sub">
+          Apollo Server is the most popular way to build a GraphQL server in
+          Node.js. It takes your typeDefs and resolvers and handles everything
+          else.
+        </p>
+        <div class="two-col" style="margin-top: 28px">
+          <div class="panel">
+            <div class="panel-label">What it does</div>
+            <ul class="plain-list" style="margin-top: 0">
+              <li>Parses and validates incoming GraphQL queries</li>
+              <li>Routes each field to the right resolver</li>
+              <li>Handles errors and formatting</li>
+              <li>Provides a built-in sandbox (Apollo Studio)</li>
+              <li>Works with Express, Fastify, and more</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <div class="panel-label">Setup — index.js</div>
+            <pre class="code" id="code-apollo"></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. QUERIES -->
+      <div class="slide">
+        <div class="bar"></div>
+        <div class="label">Operation 1</div>
+        <h2>Queries — Reading Data</h2>
+        <p class="sub">
+          A query describes the data you want. GraphQL returns exactly that
+          shape.
+        </p>
+        <div class="four-grid">
+          <div class="panel">
+            <div class="panel-label">All books with author</div>
+            <pre class="code" id="code-q1"></pre>
+          </div>
+          <div class="panel">
+            <div class="panel-label">Single book by ID</div>
+            <pre class="code" id="code-q2"></pre>
+          </div>
+          <div class="panel">
+            <div class="panel-label">Books by author</div>
+            <pre class="code" id="code-q3"></pre>
+          </div>
+          <div class="panel">
+            <div class="panel-label">Authors with books</div>
+            <pre class="code" id="code-q4"></pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9. MUTATIONS -->
+      <div class="slide">
+        <div class="bar"></div>
+        <div class="label">Operation 2</div>
+        <h2>Mutations — Writing Data</h2>
+        <p class="sub">
+          A mutation handles creates, updates, and deletes. You still control
+          exactly what fields come back.
+        </p>
+        <div class="two-col">
+          <div class="panel">
+            <div class="panel-label">Add an author</div>
+            <pre class="code" id="code-m1"></pre>
+          </div>
+          <div class="panel">
+            <div class="panel-label">Add a book</div>
+            <pre class="code" id="code-m2"></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- #deck -->
+
+    <script>
+      // Code stored as plain strings — no HTML, no escaping, no syntax highlighting
+      const code = {
+        "code-books-q": `{
+  books {
+    id
+    title
+    author {
+      name
+    }
+  }
+}
+
+# or authors with their books:
+{
+  authors {
+    name
+    books { title }
+  }
+}`,
+
+        "code-typedefs": `type Book {
+  id:            String!
+  title:         String!
+  publishedYear: Int
+  author:        [Author]!
+}
+
+type Author {
+  id:    ID!
+  name:  String!
+  books: [Book]
+}`,
+
+        "code-resolvers": `const resolvers = {
+  Query: {
+    books: () => books,
+    book: (_, { id }) =>
+      books.find(b => b.id === id),
+  },
+  Book: {
+    author: (parent) =>
+      authors.filter(a =>
+        parent.authorIds.includes(a.id)
+      ),
+  },
+};`,
+
+        "code-q1": `{
+  books {
+    id
+    title
+    publishedYear
+    author {
+      name
+    }
+  }
+}`,
+
+        "code-q2": `query GetBook($id: String) {
+  book(id: $id) {
+    title
+    publishedYear
+    author {
+      name
+      books { title }
+    }
+  }
+}`,
+
+        "code-q3": `{
+  booksByAuthor(authorId: "1") {
+    title
+    publishedYear
+  }
+}`,
+
+        "code-q4": `{
+  authors {
+    id
+    name
+    books {
+      title
+      publishedYear
+    }
+  }
+}`,
+
+        "code-m1": `mutation AddAuthor($name: String) {
+  addAuthor(name: $name) {
+    id
+    name
+  }
+}
+
+// Variables
+{ "name": "J.R.R. Tolkien" }`,
+
+        "code-m2": `mutation AddBook(
+  $title:  String,
+  $year:   String,
+  $author: String
+) {
+  addBook(
+    title: $title,
+    publishedYear: $year,
+    author: $author
+  ) {
+    id
+    title
+    author { name }
+  }
+}`,
+
+        "code-apollo": `import { ApolloServer } from "@apollo/server";
+import { expressMiddleware } from "@as-integrations/express5";
+import { typeDefs } from "./typeDefs.js";
+import { resolvers } from "./resolvers.js";
+import express from "express";
+import cors from "cors";
+
+const server = new ApolloServer({ typeDefs, resolvers });
+await server.start();
+
+const app = express();
+app.use("/graphql", cors(), express.json(), expressMiddleware(server));
+
+app.listen(4000, () => {
+  console.log("Server ready at http://localhost:4000/graphql");
+});`,
+      };
+
+      // inject as plain text — no innerHTML, no escaping issues
+      Object.entries(code).forEach(([id, src]) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = src;
+      });
+
+      // slide navigation
+      const slides = Array.from(document.querySelectorAll(".slide"));
+      let cur = 0;
+      const bar = document.getElementById("bar");
+      const count = document.getElementById("count");
+
+      function goTo(i) {
+        if (i < 0 || i >= slides.length) return;
+        slides[cur].classList.remove("active");
+        slides[cur].classList.add("exit");
+        const prev = cur;
+        cur = i;
+        setTimeout(() => slides[prev].classList.remove("exit"), 350);
+        slides[cur].classList.add("active");
+        bar.style.width = ((cur + 1) / slides.length) * 100 + "%";
+        count.textContent = cur + 1 + " / " + slides.length;
+      }
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight" || e.key === "ArrowDown") goTo(cur + 1);
+        else if (e.key === "ArrowLeft" || e.key === "ArrowUp") goTo(cur - 1);
+      });
+
+      let tx = 0;
+      document.addEventListener(
+        "touchstart",
+        (e) => (tx = e.touches[0].clientX),
+      );
+      document.addEventListener("touchend", (e) => {
+        const d = e.changedTouches[0].clientX - tx;
+        if (Math.abs(d) > 50) d < 0 ? goTo(cur + 1) : goTo(cur - 1);
+      });
+
+      goTo(0);
+    </script>
+  </body>
+</html>
