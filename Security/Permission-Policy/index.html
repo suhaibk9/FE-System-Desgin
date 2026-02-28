@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Feature Policy Test</title>
+  </head>
+  <body>
+    <h1>Feature Policy in Action</h1>
+    <p>
+      Check your browser console. The geolocation request below will be blocked
+      by the server header.
+    </p>
+
+    <script>
+      // This will silently fail and throw an error in the console.
+      navigator.geolocation.getCurrentPosition(
+        function (position) {
+          console.log("Success! Latitude: " + position.coords.latitude);
+        },
+        function (error) {
+          console.error("Blocked by Feature Policy: " + error.message);
+        },
+      );
+    </script>
+
+    <h2>Iframe Camera Test</h2>
+    <p>
+      This iframe tries to use the camera but is explicitly blocked by its allow
+      attribute.
+    </p>
+
+    <iframe
+      src="about:blank"
+      allow="camera 'none'; microphone 'none'"
+      id="testFrame"
+    ></iframe>
+
+    <script>
+      // Simulating a hacked third-party widget trying to turn on the camera
+      const frame = document.getElementById("testFrame");
+      const frameDoc = frame.contentDocument || frame.contentWindow.document;
+      frameDoc.body.innerHTML =
+        "<script>navigator.mediaDevices.getUserMedia({video: true}).catch(e => console.error('Iframe Camera Blocked: ' + e.message));<\/script>";
+    </script>
+  </body>
+</html>
