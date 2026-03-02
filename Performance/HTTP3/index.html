@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Product Listing</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f7f9fc;
+        color: #333;
+        padding: 40px 20px;
+      }
+      h1 {
+        text-align: center;
+        margin-bottom: 40px;
+        font-size: 2.5rem;
+        color: #2c3e50;
+      }
+      .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 30px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .product-card {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        text-align: center;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+      .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+      }
+      .product-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-bottom: 20px;
+      }
+      .product-title {
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+        color: #2c3e50;
+      }
+      .product-price {
+        font-weight: bold;
+        color: #e74c3c;
+        font-size: 1.3rem;
+        margin-bottom: 20px;
+      }
+      .add-to-cart {
+        background: #3498db;
+        color: white;
+        border: none;
+        padding: 12px;
+        width: 100%;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        transition: background 0.3s;
+      }
+      .add-to-cart:hover {
+        background: #2980b9;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Featured Products</h1>
+    <div class="product-grid">
+      <!-- Product 1 -->
+      <div class="product-card">
+        <img
+          src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80"
+          alt="Audio"
+          class="product-image"
+        />
+        <h2 class="product-title">Wireless Headphones</h2>
+        <div class="product-price">$99.99</div>
+        <button class="add-to-cart">Add to Cart</button>
+      </div>
+      <!-- Product 2 -->
+      <div class="product-card">
+        <img
+          src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80"
+          alt="Wearable"
+          class="product-image"
+        />
+        <h2 class="product-title">Smart Watch Pro</h2>
+        <div class="product-price">$149.99</div>
+        <button class="add-to-cart">Add to Cart</button>
+      </div>
+      <!-- Product 3 -->
+      <div class="product-card">
+        <img
+          src="https://images.unsplash.com/photo-1595225476474-87563907a212?auto=format&fit=crop&w=600&q=80"
+          alt="Peripheral"
+          class="product-image"
+        />
+        <h2 class="product-title">Mechanical Keyboard</h2>
+        <div class="product-price">$89.50</div>
+        <button class="add-to-cart">Add to Cart</button>
+      </div>
+      <!-- Product 4 -->
+      <div class="product-card">
+        <img
+          src="https://images.unsplash.com/photo-1527814050087-179f01222956?auto=format&fit=crop&w=600&q=80"
+          alt="Gaming"
+          class="product-image"
+        />
+        <h2 class="product-title">Ergonomic Mouse</h2>
+        <div class="product-price">$45.00</div>
+        <button class="add-to-cart">Add to Cart</button>
+      </div>
+      <!-- Product 5 -->
+      <div class="product-card">
+        <img
+          src="https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=600&q=80"
+          alt="Display"
+          class="product-image"
+        />
+        <h2 class="product-title">Ultra HD 4K Monitor</h2>
+        <div class="product-price">$329.99</div>
+        <button class="add-to-cart">Add to Cart</button>
+      </div>
+      <!-- Product 6 -->
+      <div class="product-card">
+        <img
+          src="https://images.unsplash.com/photo-1531492746076-161ca9bcad58?auto=format&fit=crop&w=600&q=80"
+          alt="Storage"
+          class="product-image"
+        />
+        <h2 class="product-title">1TB Portable SSD</h2>
+        <div class="product-price">$119.00</div>
+        <button class="add-to-cart">Add to Cart</button>
+      </div>
+      <!-- Product 7 -->
+      <div class="product-card">
+        <img
+          src="https://images.unsplash.com/photo-1616422285623-14ff015b6728?auto=format&fit=crop&w=600&q=80"
+          alt="Accessory"
+          class="product-image"
+        />
+        <h2 class="product-title">USB-C Power Hub</h2>
+        <div class="product-price">$35.99</div>
+        <button class="add-to-cart">Add to Cart</button>
+      </div>
+      <!-- Product 8 -->
+      <div class="product-card">
+        <img
+          src="https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=600&q=80"
+          alt="Audio"
+          class="product-image"
+        />
+        <h2 class="product-title">ANC Earbuds</h2>
+        <div class="product-price">$129.99</div>
+        <button class="add-to-cart">Add to Cart</button>
+      </div>
+      <!-- Product 9 -->
+      <div class="product-card">
+        <img
+          src="https://images.unsplash.com/photo-1599557404456-e23a35ea29b1?auto=format&fit=crop&w=600&q=80"
+          alt="Camera"
+          class="product-image"
+        />
+        <h2 class="product-title">1080p Webcam</h2>
+        <div class="product-price">$55.00</div>
+        <button class="add-to-cart">Add to Cart</button>
+      </div>
+      <!-- Product 10 -->
+      <div class="product-card">
+        <img
+          src="https://images.unsplash.com/photo-1621528445173-fbef5dbdb0d8?auto=format&fit=crop&w=600&q=80"
+          alt="Accessory"
+          class="product-image"
+        />
+        <h2 class="product-title">Aluminum Laptop Stand</h2>
+        <div class="product-price">$29.99</div>
+        <button class="add-to-cart">Add to Cart</button>
+      </div>
+    </div>
+  </body>
+</html>
