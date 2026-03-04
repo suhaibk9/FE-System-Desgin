@@ -1,0 +1,60 @@
+{
+  "TUTORIALS": [
+    {
+      "id": 1,
+      "image": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=600&q=80",
+      "title": "Mastering React in 10 Minutes",
+      "views": "2.0 Million Views",
+      "published": "9 months Ago"
+    },
+    {
+      "id": 2,
+      "image": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=600&q=80",
+      "title": "Next.js 14 App Router Crash Course",
+      "views": "850K Views",
+      "published": "2 months Ago"
+    },
+    {
+      "id": 3,
+      "image": "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=600&q=80",
+      "title": "Build a Full-Stack Twitter Clone",
+      "views": "3.1 Million Views",
+      "published": "1 year Ago"
+    },
+    {
+      "id": 4,
+      "image": "https://images.unsplash.com/photo-1618477388954-7852f32655ec?auto=format&fit=crop&w=600&q=80",
+      "title": "CSS Grid & Flexbox Masterclass",
+      "views": "1.2 Million Views",
+      "published": "6 months Ago"
+    },
+    {
+      "id": 5,
+      "image": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=600&q=80",
+      "title": "Node.js & Express API from Scratch",
+      "views": "500K Views",
+      "published": "3 weeks Ago"
+    },
+    {
+      "id": 6,
+      "image": "https://images.unsplash.com/photo-1534972195531-d756b9bfa9f2?auto=format&fit=crop&w=600&q=80",
+      "title": "Advanced TypeScript Tips & Tricks",
+      "views": "150K Views",
+      "published": "5 days Ago"
+    },
+    {
+      "id": 7,
+      "image": "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=600&q=80",
+      "title": "Docker for Web Developers",
+      "views": "920K Views",
+      "published": "11 months Ago"
+    },
+    {
+      "id": 8,
+      "image": "https://images.unsplash.com/photo-1605379399642-870262d3d051?auto=format&fit=crop&w=600&q=80",
+      "title": "Authentication with NextAuth.js",
+      "views": "340K Views",
+      "published": "1 month Ago"
+    }
+  ]
+}
