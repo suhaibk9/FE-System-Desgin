@@ -1,0 +1,48 @@
+[
+  {
+    "id": 1,
+    "title": "The Future of AI in Web Development",
+    "category": "Technology"
+  },
+  { "id": 2, "title": "Top 10 Healthy Breakfast Ideas", "category": "Health" },
+  {
+    "id": 3,
+    "title": "Investing 101: Stock Market Basics",
+    "category": "Finance"
+  },
+  {
+    "id": 4,
+    "title": "Minimalist Living: A Beginner's Guide",
+    "category": "Lifestyle"
+  },
+  {
+    "id": 5,
+    "title": "Best Upcoming Indie Games of the Year",
+    "category": "Gaming"
+  },
+  {
+    "id": 6,
+    "title": "Understanding Quantum Computing",
+    "category": "Technology"
+  },
+  {
+    "id": 7,
+    "title": "Home Workout Routines No Equipment",
+    "category": "Health"
+  },
+  {
+    "id": 8,
+    "title": "How to Build a Budget That Works",
+    "category": "Finance"
+  },
+  {
+    "id": 9,
+    "title": "Travel Hacks for Cheap Flights",
+    "category": "Lifestyle"
+  },
+  {
+    "id": 10,
+    "title": "Review: The New Virtual Reality Headset",
+    "category": "Gaming"
+  }
+]

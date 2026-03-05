@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dexie.js Sandbox</title>
+    <style>
+      body {
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+        max-width: 500px;
+        margin: 40px auto;
+        padding: 20px;
+        background-color: #f9fafb;
+      }
+      h2 {
+        font-size: 1.2rem;
+        color: #374151;
+        margin-top: 30px;
+        border-bottom: 2px solid #e5e7eb;
+        padding-bottom: 5px;
+      }
+      button {
+        display: block;
+        width: 100%;
+        margin-bottom: 10px;
+        padding: 10px 15px;
+        background-color: #2563eb;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+      button:hover {
+        background-color: #1d4ed8;
+      }
+      .alert {
+        background-color: #fef3c7;
+        border-left: 4px solid #f59e0b;
+        padding: 15px;
+        margin-bottom: 20px;
+        color: #92400e;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="alert">
+      <strong>⚠️ OPEN YOUR CONSOLE!</strong><br />
+      Press F12 or Right-Click > Inspect > Console to see the database output.
+    </div>
+
+    <h2>1. Create Data</h2>
+    <button id="addFriendsBtn">
+      Add Friends (Akshay, Chirag, Elon, Alice)
+    </button>
+
+    <h2>2. Read Data</h2>
+    <button id="findAllBtn">Find ALL Friends</button>
+    <button id="findSpecBtn">Find exactly ID: 1</button>
+    <button id="findOlderBtn">Find Age > 25</button>
+    <button id="findStartsBtn">Find Name starts with "A"</button>
+
+    <h2>3. Update & Delete</h2>
+    <button id="updateBtn">Update ID: 1 (Make age 29)</button>
+    <button id="deleteBtn">Delete exactly ID: 2</button>
+    <button id="bulkDeleteBtn">Nuke Everyone Under 18</button>
+
+    <script type="module">
+      import Dexie from "https://unpkg.com/dexie@4.0.8/dist/modern/dexie.mjs";
+
+      // 1. Name your database
+      const db = new Dexie("MyStartupDB");
+
+      // 2. Define your schema
+      db.version(1).stores({
+        friends: "++id, name, age",
+      });
+
+      // --- CREATE ---
+      document
+        .getElementById("addFriendsBtn")
+        .addEventListener("click", async () => {
+          const newId = await db.friends.add({
+            name: "Akshay",
+            age: 28,
+            isDeveloper: true,
+          });
+          console.log(`Success! Akshay was added with ID: ${newId}`);
+
+          await db.friends.bulkAdd([
+            { name: "Chirag", age: 30 },
+            { name: "Elon", age: 52 },
+            { name: "Alice", age: 16 },
+          ]);
+          console.log(`Success! Bulk operation completed.`);
+        });
+
+      // --- READ ---
+      document
+        .getElementById("findAllBtn")
+        .addEventListener("click", async () => {
+          const allFriends = await db.friends.toArray();
+          console.log("All Friends:", allFriends);
+        });
+
+      document
+        .getElementById("findSpecBtn")
+        .addEventListener("click", async () => {
+          const akshay = await db.friends.get(1);
+          console.log("Found ID 1:", akshay);
+        });
+
+      document
+        .getElementById("findOlderBtn")
+        .addEventListener("click", async () => {
+          const olderFriends = await db.friends
+            .where("age")
+            .above(25)
+            .toArray();
+          console.log("Friends older than 25:", olderFriends);
+        });
+
+      document
+        .getElementById("findStartsBtn")
+        .addEventListener("click", async () => {
+          const aNames = await db.friends
+            .where("name")
+            .startsWith("A")
+            .toArray();
+          console.log('Friends starting with "A":', aNames);
+        });
+
+      // --- UPDATE & DELETE ---
+      document
+        .getElementById("updateBtn")
+        .addEventListener("click", async () => {
+          await db.friends.update(1, { age: 29 });
+          console.log("Updated ID 1 to age 29!");
+        });
+
+      document
+        .getElementById("deleteBtn")
+        .addEventListener("click", async () => {
+          await db.friends.delete(2);
+          console.log("Deleted ID 2.");
+        });
+
+      document
+        .getElementById("bulkDeleteBtn")
+        .addEventListener("click", async () => {
+          const deleteCount = await db.friends.where("age").below(18).delete();
+          console.log(`Nuked ${deleteCount} friend(s) under 18.`);
+        });
+    </script>
+  </body>
+</html>

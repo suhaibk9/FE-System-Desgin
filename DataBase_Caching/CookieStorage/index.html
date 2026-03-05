@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cookie Storage Demo</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        padding: 2rem;
+        max-width: 600px;
+        margin: 0 auto;
+        background: #f4f4f4;
+      }
+      .card {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+      }
+      h2 {
+        margin-top: 0;
+      }
+      input[type="text"] {
+        padding: 8px;
+        margin-right: 10px;
+        width: 200px;
+      }
+      button {
+        padding: 8px 16px;
+        cursor: pointer;
+        background: #3498db;
+        color: white;
+        border: none;
+        border-radius: 4px;
+      }
+      button.danger {
+        background: #e74c3c;
+      }
+      select {
+        padding: 8px;
+        width: 100%;
+        margin-bottom: 15px;
+      }
+      .hidden {
+        display: none;
+      }
+
+      .article-item {
+        padding: 10px;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .article-item:last-child {
+        border-bottom: none;
+      }
+      .article-title {
+        font-weight: bold;
+        color: #333;
+      }
+      .article-badge {
+        font-size: 0.8rem;
+        background: #eee;
+        padding: 3px 8px;
+        border-radius: 12px;
+        color: #666;
+      }
+      .recommended-badge {
+        background: #f1c40f;
+        color: #8a6d3b;
+        font-weight: bold;
+        margin-right: 10px;
+        font-size: 0.8rem;
+        padding: 2px 6px;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Cookie Based Preferences</h1>
+
+    <!-- Login Section -->
+    <div id="loginSection" class="card">
+      <h2>Login</h2>
+      <p>Enter your username to log in.</p>
+      <input type="text" id="usernameInput" placeholder="Enter username..." />
+      <button id="loginBtn">Login</button>
+    </div>
+
+    <!-- Authenticated User Section (Hidden by default) -->
+    <div id="authSection" class="hidden">
+      <div
+        class="card"
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          background: #2c3e50;
+          color: white;
+        "
+      >
+        <div>Welcome back, <strong id="displayUsername">User</strong>!</div>
+        <button id="logoutBtn" class="danger">Logout</button>
+      </div>
+
+      <!-- Preferences Section -->
+      <div class="card">
+        <h2>Your Preferences</h2>
+        <p>Select your favorite topic to see customized recommendations.</p>
+        <select id="preferenceSelect">
+          <option value="">-- No Preference --</option>
+          <option value="Technology">Technology</option>
+          <option value="Health">Health</option>
+          <option value="Finance">Finance</option>
+          <option value="Lifestyle">Lifestyle</option>
+          <option value="Gaming">Gaming</option>
+        </select>
+        <button id="savePreferenceBtn">Save Preference</button>
+      </div>
+
+      <!-- Content Feed Section -->
+      <div class="card">
+        <h2>Daily Feed</h2>
+        <div id="feedContainer">Loading...</div>
+      </div>
+    </div>
+
+    <script src="index.js"></script>
+  </body>
+</html>

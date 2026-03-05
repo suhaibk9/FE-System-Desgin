@@ -1,0 +1,12 @@
+/* This file is served from /static/style.css */
+/* It will be cached for 365 days with Cache-Control: max-age=31536000, immutable */
+/* After the first download, it won't even show up in the Network tab */
+
+body {
+  font-family: sans-serif;
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 20px;
+  background: #f0f0f0;
+  color: #333;
+}
