@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Service Worker Demo</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        max-width: 500px;
+        margin: 40px auto;
+        padding: 20px;
+      }
+      button {
+        padding: 10px 16px;
+        margin: 5px 0;
+        cursor: pointer;
+        display: block;
+      }
+      pre {
+        background: #1e1e1e;
+        color: #d4d4d4;
+        padding: 15px;
+        border-radius: 6px;
+        max-height: 300px;
+        overflow-y: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Service Worker Demo</h1>
+    <p>
+      Open DevTools → <strong>Application → Service Workers</strong> to see it
+      register.
+    </p>
+    <p>Check <strong>Console</strong> for logs.</p>
+
+    <button id="fetchBtn">Fetch /data.json</button>
+    <button id="offlineBtn">Go Offline & Fetch (test cache fallback)</button>
+    <hr />
+    <h3>Log</h3>
+    <pre id="log">Waiting...</pre>
+
+    <script>
+      const logEl = document.getElementById("log");
+      function log(msg) {
+        logEl.textContent = msg + "\n" + logEl.textContent;
+        console.log(msg);
+      }
+
+      // ==============================
+      // STEP 1: REGISTER the Service Worker
+      // ==============================
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker
+          .register("/sw.js")
+          .then((reg) =>
+            log("✅ Service Worker registered! Scope: " + reg.scope),
+          )
+          .catch((err) => log("❌ Registration failed: " + err));
+      } else {
+        log("❌ Service Workers not supported in this browser");
+      }
+
+      // ==============================
+      // Test: Fetch data.json
+      // ==============================
+      document
+        .getElementById("fetchBtn")
+        .addEventListener("click", async () => {
+          try {
+            const res = await fetch("/data.json");
+            const data = await res.json();
+            log("Fetched data.json: " + JSON.stringify(data));
+          } catch (err) {
+            log("Fetch failed: " + err.message);
+          }
+        });
+
+      // ==============================
+      // Test: Simulate offline
+      // ==============================
+      document
+        .getElementById("offlineBtn")
+        .addEventListener("click", async () => {
+          log("Attempting fetch (if offline, SW cache will kick in)...");
+          try {
+            const res = await fetch("/data.json");
+            const data = await res.json();
+            log("Got data (possibly from cache): " + JSON.stringify(data));
+          } catch (err) {
+            log("Fetch failed (no cache either): " + err.message);
+          }
+        });
+    </script>
+  </body>
+</html>

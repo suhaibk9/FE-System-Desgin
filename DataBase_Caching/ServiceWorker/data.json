@@ -1,0 +1,5 @@
+{
+  "message": "Hello from data.json!",
+  "version": "1.0",
+  "items": ["apple", "banana", "cherry"]
+}
