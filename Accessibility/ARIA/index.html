@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Essential ARIA Reference Guide</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        line-height: 1.6;
+        padding: 20px;
+        max-width: 800px;
+        margin: 0 auto;
+        color: #333;
+      }
+      section {
+        margin-bottom: 40px;
+        border: 1px solid #ccc;
+        padding: 20px;
+        border-radius: 5px;
+      }
+      h2 {
+        border-bottom: 2px solid #005fcc;
+        padding-bottom: 5px;
+      }
+      button {
+        padding: 10px 15px;
+        cursor: pointer;
+      }
+      .hidden {
+        display: none;
+      }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>
+      Essential WAI-ARIA (Web Accessibility Initiative - Accessible Rich
+      Internet Applications) Reference
+    </h1>
+    <p>
+      This document demonstrates how to use the major ARIA Roles, States, and
+      Properties. It should serve as a reference guide for building custom,
+      accessible components.
+    </p>
+
+    <!-- ==========================================
+       SECTION 1: LANDMARK ROLES
+       Used to define regions of the page so screen readers can quickly navigate to them.
+       (In HTML5, native tags like <nav>, <header>, <main> have implicit landmark roles,
+       but ARIA roles are useful if you're forced to use <div>s).
+       ========================================== -->
+    <section>
+      <h2>1. Landmark Roles</h2>
+
+      <!-- role="banner": Typically the site header/logo area -->
+      <div role="banner">
+        <h3>Site Logo & Title (role="banner")</h3>
+      </div>
+
+      <!-- role="navigation": Helps users find primary navigation links -->
+      <nav role="navigation" aria-label="Main menu">
+        <ul>
+          <!-- aria-current="page" tells the screen reader which link represents the current active page -->
+          <li><a href="#" aria-current="page">Home</a></li>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </nav>
+
+      <!-- role="main": The primary content of the document -->
+      <div role="main">
+        <p>This is the primary content area (role="main").</p>
+      </div>
+
+      <!-- role="contentinfo": Typically the footer of the site -->
+      <div role="contentinfo">
+        <p>&copy; 2026 Accessibility Demo (role="contentinfo")</p>
+      </div>
+    </section>
+
+    <!-- ==========================================
+       SECTION 2: WIDGET ROLES & STATES
+       Used when you build custom interactive elements that behave like native HTML inputs,
+       but are created using <div> wrappers or other non-semantic tags.
+       ========================================== -->
+    <section>
+      <h2>2. Custom Widgets (Roles & States)</h2>
+
+      <!-- role="button": Tells the screen reader this <div> acts as a button -->
+      <!-- tabindex="0": Makes this <div> focusable via keyboard -->
+      <!-- aria-pressed: Indicates the toggle state of a button (true, false, or mixed) -->
+      <div
+        role="button"
+        tabindex="0"
+        aria-pressed="false"
+        style="
+          border: 1px solid #333;
+          padding: 10px;
+          display: inline-block;
+          cursor: pointer;
+          background: #eee;
+        "
+        onclick="
+          this.setAttribute(
+            'aria-pressed',
+            this.getAttribute('aria-pressed') === 'true' ? 'false' : 'true',
+          );
+          this.style.background =
+            this.getAttribute('aria-pressed') === 'true' ? '#ccc' : '#eee';
+        "
+        onkeydown="
+          if (event.key === 'Enter' || event.key === ' ') this.click();
+        "
+      >
+        Custom Toggle Button (role="button" & aria-pressed)
+      </div>
+
+      <br /><br />
+
+      <!-- role="checkbox": Tells the screen reader this is a checkbox -->
+      <!-- aria-checked="mixed": States can be true, false, or mixed (for nested lists of checkboxes) -->
+      <div role="checkbox" aria-checked="mixed" tabindex="0">
+        [-] Custom Mixed Checkbox (role="checkbox" & aria-checked="mixed")
+      </div>
+    </section>
+
+    <!-- ==========================================
+       SECTION 3: RELATIONSHIP & DESCRIPTIVE PROPERTIES
+       Used to connect different elements together (e.g., a labe with an input, or help text with an input).
+       ========================================== -->
+    <section>
+      <h2>3. Relationships (aria-labelledby, aria-describedby)</h2>
+
+      <!-- aria-labelledby: Points to the ID of another element that serves as the label -->
+      <h3 id="billing-header">Billing Details</h3>
+      <div role="region" aria-labelledby="billing-header">
+        <p>This region is labeled by the H3 above.</p>
+      </div>
+
+      <br />
+
+      <!-- aria-describedby: Connects an element to supplementary descriptive text (like a hint or error message) -->
+      <!-- aria-required: Tells the screen reader the input must be filled out -->
+      <!-- aria-invalid: Tells the screen reader there is a validation error right now -->
+      <div>
+        <label for="username">Username (aria-describedby):</label>
+        <input
+          type="text"
+          id="username"
+          aria-required="true"
+          aria-invalid="true"
+          aria-describedby="username-hint username-error"
+        />
+        <!-- These hint and error divs are linked to the input via their IDs -->
+        <div id="username-hint" style="color: gray; font-size: 0.9em">
+          Username must be 8 characters long.
+        </div>
+        <div id="username-error" style="color: red; font-size: 0.9em">
+          Error: Username is already taken!
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+       SECTION 4: DYNAMIC CONTENT (LIVE REGIONS)
+       Crucial for Single Page Apps (React/Angular). They tell the screen reader to 
+       announce text that changes asynchronously without the user moving focus.
+       ========================================== -->
+    <section>
+      <h2>4. Live Regions (aria-live, role="alert")</h2>
+
+      <!-- role="alert": Automatically an aria-live="assertive" region. The screen reader will interrupt everything immediately to read this. -->
+      <!-- aria-atomic="true": Forces the screen reader to read the *entire* region, not just the word that changed. -->
+      <div
+        role="alert"
+        aria-atomic="true"
+        style="
+          padding: 10px;
+          background: #ffebee;
+          border: 1px solid red;
+          margin-bottom: 20px;
+        "
+      >
+        This is an alert box! Screen readers immediately interrupt the current
+        task to read this when it appears.
+      </div>
+
+      <!-- aria-live="polite": The screen reader waits until it finishes what it's saying, then politely announces this update. Good for chat messages or standard "Saved!" text. -->
+      <div
+        aria-live="polite"
+        style="padding: 10px; background: #e8f5e9; border: 1px solid green"
+      >
+        <span id="save-status"
+          >Status Update: Your settings have been saved (polite
+          notification).</span
+        >
+      </div>
+
+      <br />
+      <button
+        onclick="
+          document.getElementById('save-status').innerText =
+            'Status Update: Profile updated at ' +
+            new Date().toLocaleTimeString()
+        "
+      >
+        Trigger Polite Update
+      </button>
+    </section>
+
+    <!-- ==========================================
+       SECTION 5: HIDING ELEMENTS
+       Different ways to hide visual vs semantic content.
+       ========================================== -->
+    <section>
+      <h2>5. Hiding Stuff (aria-hidden)</h2>
+
+      <!-- aria-hidden="true": Removes the element from the accessibility tree.
+         Visually sighted users see it, but screen readers completely ignore it entirely.
+         Useful for decorative icons next to text. -->
+      <button><span aria-hidden="true">🔔</span> Notifications</button>
+
+      <br /><br />
+
+      <!-- .sr-only class (Screen Reader Only): 
+         Visually hides the text from sighted users using CSS clip, but leaves it in the DOM 
+         so screen readers WILL read it. Crucial for adding context without ruining visual design. -->
+      <button>X <span class="sr-only">Close this modal window</span></button>
+    </section>
+
+    <!-- ==========================================
+       SECTION 6: EXPANDABLE CONTENT (ACCORDIONS / MENUS)
+       The single most common ARIA pattern in modern web apps.
+       ========================================== -->
+    <section>
+      <h2>6. Expandable Content (aria-expanded, aria-controls)</h2>
+
+      <!-- aria-expanded: Tells the screen reader if the attached content is currently visible (true) or hidden (false). -->
+      <!-- aria-controls: Points to the ID of the element that this button shows/hides. -->
+      <!-- aria-haspopup="menu": Tells the user that clicking this opens a menu. -->
+      <button
+        id="menu-btn"
+        aria-expanded="false"
+        aria-controls="dropdown-menu"
+        aria-haspopup="menu"
+        onclick="
+          const menu = document.getElementById('dropdown-menu');
+          const isExpanded = this.getAttribute('aria-expanded') === 'true';
+          this.setAttribute('aria-expanded', !isExpanded);
+          menu.classList.toggle('hidden');
+        "
+      >
+        Toggle Dropdown Menu
+      </button>
+
+      <ul
+        id="dropdown-menu"
+        class="hidden"
+        role="menu"
+        aria-labelledby="menu-btn"
+        style="
+          border: 1px solid #ccc;
+          padding: 10px;
+          width: 150px;
+          background: #fff;
+        "
+      >
+        <li role="menuitem" tabindex="-1">Profile</li>
+        <li role="menuitem" tabindex="-1">Settings</li>
+        <li role="menuitem" tabindex="-1">Logout</li>
+      </ul>
+    </section>
+
+    <!-- ==========================================
+       SECTION 7: MODALS AND DIALOGS
+       How to tell a screen reader a popup exists.
+       ========================================== -->
+    <section>
+      <h2>7. Modals (role="dialog")</h2>
+
+      <!-- role="dialog": Informs the user they are inside a sub-window. -->
+      <!-- aria-modal="true": Tells the screen reader that content *outside* this div cannot be interacted with right now. -->
+      <!-- aria-labelledby: Connects the dialog to its visual title/heading. -->
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="dialog-title"
+        style="
+          border: 2px solid black;
+          padding: 20px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        "
+      >
+        <h3 id="dialog-title">Delete Account</h3>
+        <p>Are you sure you want to permanently delete your account?</p>
+        <button>Cancel</button>
+        <button>Confirm Delete</button>
+      </div>
+    </section>
+  </body>
+</html>
