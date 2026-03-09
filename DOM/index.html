@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="container">
+      <header>
+        <h1>My Nested DOM List</h1>
+        <p id="subtitle">Explore the DOM properties</p>
+      </header>
+      <main>
+        <section id="list-section">
+          <h2>Fruits</h2>
+          <ul id="myList">
+            <!-- A comment node for childNodes observation -->
+            <li id="item-apple" class="fruit">Apple</li>
+            <li id="item-banana" class="fruit">Banana</li>
+            <li id="item-cherry" class="fruit">Cherry</li>
+          </ul>
+        </section>
+      </main>
+      <footer>
+        <p>Footer content</p>
+      </footer>
+    </div>
+    <script>
+      const myList = document.getElementById("myList");
+      const bananaItem = document.getElementById("item-banana");
+
+      // Parent element
+      console.log("parentElement:", bananaItem.parentElement); // Prints: <ul id="myList">...</ul>
+
+      // Siblings
+      console.log("nextSibling:", bananaItem.nextSibling); // Prints: #text (whitespace node)
+      console.log("nextElementSibling:", bananaItem.nextElementSibling); // Prints: <li id="item-cherry" class="fruit">Cherry</li>
+      console.log("previousSibling:", bananaItem.previousSibling); // Prints: #text (whitespace node)
+      console.log("previousElementSibling:", bananaItem.previousElementSibling); // Prints: <li id="item-apple" class="fruit">Apple</li>
+
+      // Children
+      console.log("childNodes:", myList.childNodes); // Prints: NodeList(9) [text, comment, text, li#item-apple, text, li#item-banana, text, li#item-cherry, text]
+      console.log("children:", myList.children); // Prints: HTMLCollection(3) [li#item-apple, li#item-banana, li#item-cherry]
+      console.log("firstChild:", myList.firstChild); // Prints: #text (whitespace node)
+      console.log("firstElementChild:", myList.firstElementChild); // Prints: <li id="item-apple" class="fruit">Apple</li>
+      console.log("lastChild:", myList.lastChild); // Prints: #text (whitespace node)
+      console.log("lastElementChild:", myList.lastElementChild); // Prints: <li id="item-cherry" class="fruit">Cherry</li>
+    </script>
+  </body>
+</html>
