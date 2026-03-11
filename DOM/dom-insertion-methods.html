@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Modern DOM Insertion Methods</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        padding: 20px;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      .container {
+        border: 2px solid #ccc;
+        padding: 20px;
+        margin-bottom: 20px;
+        background-color: #f9f9f9;
+        min-height: 100px;
+      }
+      .box {
+        padding: 10px;
+        margin: 5px;
+        background-color: #74b9ff;
+        color: white;
+        text-align: center;
+        border-radius: 4px;
+        font-weight: bold;
+      }
+      .new-box {
+        background-color: #55efc4;
+        color: #2d3436;
+        border: 2px dashed #00b894;
+      }
+      .controls {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+      button {
+        padding: 8px 16px;
+        cursor: pointer;
+        background-color: #0984e3;
+        border: none;
+        border-radius: 4px;
+        color: white;
+        font-weight: bold;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+      .text-node-highlight {
+        background-color: #ffeaa7;
+        padding: 2px 5px;
+        border-radius: 3px;
+        font-family: monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Modern DOM Insertion Methods</h1>
+    <p>Interactive playground for <code>append()</code>, <code>prepend()</code>, <code>before()</code>, <code>after()</code>, and <code>replaceWith()</code>.</p>
+    
+    <div class="controls">
+      <button onclick="demoAppend()">append()</button>
+      <button onclick="demoPrepend()">prepend()</button>
+      <button onclick="demoBefore()">before()</button>
+      <button onclick="demoAfter()">after()</button>
+      <button onclick="demoReplaceWith()">replaceWith()</button>
+      <button onclick="resetDemo()">Reset Playground</button>
+    </div>
+
+    <h3>Parent Container:</h3>
+    <div id="parent" class="container">
+      <div id="target" class="box">Original Target Node</div>
+    </div>
+
+    <script>
+      const parentContainer = document.getElementById('parent');
+      let counter = 1;
+
+      // Helper to quickly create a new element to insert
+      function createNewElement(text) {
+        const el = document.createElement('div');
+        el.className = 'box new-box';
+        el.textContent = text;
+        return el;
+      }
+
+      // ==========================================
+      // 1. parent.append(node1, node2, "text")
+      // ==========================================
+      // Inserts elements OR text nodes at the END of the parent's child list.
+      // E.g., inside the container, but after all other children.
+      function demoAppend() {
+        const newEl = createNewElement(`Appended Element ${counter++}`);
+        // Demonstrating that we can append both nodes AND plain text strings!
+        parentContainer.append(newEl, " [appended text] ");
+      }
+
+      // ==========================================
+      // 2. parent.prepend(node1, node2, "text")
+      // ==========================================
+      // Inserts elements OR text nodes at the BEGINNING of the parent's child list.
+      // E.g., inside the container, but before all other children.
+      function demoPrepend() {
+        const newEl = createNewElement(`Prepended Element ${counter++}`);
+        // We can prepend multiple items at once too
+        parentContainer.prepend(" [prepended text] ", newEl);
+      }
+
+      // ==========================================
+      // 3. node.before(new)
+      // ==========================================
+      // Inserts a node immediately BEFORE the target node (as a sibling).
+      function demoBefore() {
+        const target = document.getElementById('target');
+        if (target) {
+            const newEl = createNewElement(`Inserted Before ${counter++}`);
+            target.before(newEl);
+        } else {
+            alert("The Original Target Node has been replaced! Please hit Reset.");
+        }
+      }
+
+      // ==========================================
+      // 4. node.after(new)
+      // ==========================================
+      // Inserts a node immediately AFTER the target node (as a sibling).
+      function demoAfter() {
+        const target = document.getElementById('target');
+        if (target) {
+            const newEl = createNewElement(`Inserted After ${counter++}`);
+            target.after(newEl);
+        } else {
+            alert("The Original Target Node has been replaced! Please hit Reset.");
+        }
+      }
+
+      // ==========================================
+      // 5. node.replaceWith(new)
+      // ==========================================
+      // Replaces the target node completely with the new node(s) or text.
+      function demoReplaceWith() {
+        const target = document.getElementById('target');
+        if (target) {
+            const newEl = createNewElement(`I replaced the target! ${counter++}`);
+            // The old element is removed, this new one takes its exact place
+            target.replaceWith(newEl);
+        } else {
+            alert("Already replaced! Please hit Reset.");
+        }
+      }
+
+      // Utility to reset the demo
+      function resetDemo() {
+        parentContainer.innerHTML = '<div id="target" class="box">Original Target Node</div>';
+        counter = 1;
+      }
+    </script>
+  </body>
+</html>

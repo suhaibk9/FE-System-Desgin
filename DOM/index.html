@@ -36,6 +36,7 @@
       // Siblings
       console.log("nextSibling:", bananaItem.nextSibling); // Prints: #text (whitespace node)
       console.log("nextElementSibling:", bananaItem.nextElementSibling); // Prints: <li id="item-cherry" class="fruit">Cherry</li>
+      bananaItem.nextElementSibling.style.color = "red";
       console.log("previousSibling:", bananaItem.previousSibling); // Prints: #text (whitespace node)
       console.log("previousElementSibling:", bananaItem.previousElementSibling); // Prints: <li id="item-apple" class="fruit">Apple</li>
 

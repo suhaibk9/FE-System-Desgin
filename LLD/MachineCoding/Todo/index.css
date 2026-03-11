@@ -1,0 +1,28 @@
+body {
+  font-family: "Courier New", Courier, monospace;
+  padding: 0 15px;
+  background-color: #f4f4f4;
+}
+input {
+  padding: 5px;
+  border: 1px solid red;
+}
+button {
+  padding: 5px;
+  background-color: aqua;
+}
+button:hover {
+  background-color: antiquewhite;
+}
+ul {
+  list-style-type: none;
+}
+ul li {
+  display: flex;
+  margin: 10px;
+}
+
+ul li span {
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  margin-right: 10px;
+}

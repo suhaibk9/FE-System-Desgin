@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>textContent vs nodeValue</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        padding: 20px;
+      }
+      #demo-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 20px;
+        background-color: #f9f9f9;
+      }
+      .hidden-text {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Understanding textContent and nodeValue</h1>
+
+    <div id="demo-box">
+      <!-- This is a comment node -->
+      <p id="my-paragraph">
+        This is a paragraph with a <span class="hidden-text">hidden</span> word
+        and <strong>bold text</strong>.
+      </p>
+    </div>
+
+    <script>
+      const demoBox = document.getElementById("demo-box");
+      const paragraph = document.getElementById("my-paragraph");
+
+      console.log("--- textContent ---");
+      console.log("demoBox.textContent:", demoBox.textContent);
+
+      console.log("\n--- nodeValue ---");
+
+      console.log("demoBox.nodeValue (Element Node):", demoBox.nodeValue);
+
+      const cNode = demoBox.children;
+      console.log("cNode:", cNode);
+      const commentNode = demoBox.childNodes[1];
+      console.log("commentNode type (should be 8):", commentNode.nodeType);
+      console.log("commentNode.nodeValue:", commentNode.nodeValue);
+
+      const firstTextNode = paragraph.firstChild;
+      console.log("firstTextNode type (should be 3):", firstTextNode.nodeType);
+      console.log("firstTextNode.nodeValue:", firstTextNode.nodeValue);
+    </script>
+  </body>
+</html>

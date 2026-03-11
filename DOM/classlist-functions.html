@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Working with DOM classList</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        padding: 20px;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      
+      .box {
+        width: 150px;
+        height: 150px;
+        background-color: #eee;
+        border: 2px solid #ccc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+        transition: all 0.3s ease;
+        text-align: center;
+      }
+      
+      /* Classes to be added/removed/toggled via JS */
+      .highlight {
+        background-color: #ffeaa7;
+        border-color: #fdcb6e;
+      }
+      
+      .rounded {
+        border-radius: 50%;
+      }
+      
+      .shadow {
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      }
+      
+      .rotate {
+        transform: rotate(45deg);
+      }
+      
+      .big-text {
+        font-size: 24px;
+        font-weight: bold;
+        color: #d63031;
+      }
+      
+      .controls {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+      
+      button {
+        padding: 8px 16px;
+        cursor: pointer;
+        background-color: #74b9ff;
+        border: none;
+        border-radius: 4px;
+        color: white;
+        font-weight: bold;
+      }
+      
+      button:hover {
+        background-color: #0984e3;
+      }
+
+      .output {
+        padding: 10px;
+        background-color: #2d3436;
+        color: #dfe6e9;
+        font-family: monospace;
+        border-radius: 4px;
+        min-height: 100px;
+        white-space: pre-wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>DOM <code>classList</code> Functions</h1>
+    
+    <div id="target" class="box base-class">
+      Target Element
+    </div>
+
+    <div class="controls">
+      <button onclick="addClass()">add('highlight')</button>
+      <button onclick="removeClass()">remove('highlight')</button>
+      <button onclick="toggleRounded()">toggle('rounded')</button>
+      <button onclick="checkContains()">contains('shadow')</button>
+      <button onclick="replaceClass()">replace('base-class', 'shadow')</button>
+      <button onclick="addMultiple()">add(multiple classes)</button>
+      <button onclick="toggleWithForce()">toggle('rotate', force: true)</button>
+      <button onclick="showLength()">length</button>
+      <button onclick="showItem()">item(0)</button>
+      <button onclick="iterateClasses()">forEach()</button>
+      <button onclick="resetElement()">RESET</button>
+    </div>
+
+    <h2>Console Output:</h2>
+    <div id="console-output" class="output"></div>
+
+    <script>
+      const target = document.getElementById('target');
+      const output = document.getElementById('console-output');
+
+      function logMessage(msg) {
+        output.textContent = msg + '\nCurrent Classes: ' + target.className;
+      }
+
+      // 1. add() - Adds one or more classes
+      function addClass() {
+        target.classList.add('highlight');
+        logMessage("Added 'highlight' class.");
+      }
+
+      // 1b. add() multiple - Adds multiple classes at once
+      function addMultiple() {
+        target.classList.add('shadow', 'big-text');
+        logMessage("Added 'shadow' and 'big-text' classes.");
+      }
+
+      // 2. remove() - Removes one or more classes
+      function removeClass() {
+        target.classList.remove('highlight');
+        logMessage("Removed 'highlight' class.");
+      }
+
+      // 3. toggle() - Toggles a class on and off
+      function toggleRounded() {
+        const isPresent = target.classList.toggle('rounded');
+        logMessage(`Toggled 'rounded'. Now present? ${isPresent}`);
+      }
+
+      // 3b. toggle(class, force) - Forces a class to be added (true) or removed (false)
+      function toggleWithForce() {
+        // Will always add 'rotate' because the force parameter is true
+        target.classList.toggle('rotate', true);
+        logMessage("Forced 'rotate' to be active.");
+      }
+
+      // 4. contains() - Checks if a class exists
+      function checkContains() {
+        const hasShadow = target.classList.contains('shadow');
+        logMessage(`Does element contain 'shadow'? ${hasShadow}`);
+      }
+
+      // 5. replace() - Replaces an existing class with a new one
+      function replaceClass() {
+        const wasReplaced = target.classList.replace('base-class', 'shadow');
+        logMessage(`Replaced 'base-class' with 'shadow'. Success? ${wasReplaced}`);
+      }
+
+      // 6. length - Returns the number of classes
+      function showLength() {
+        const count = target.classList.length;
+        logMessage(`Element has ${count} classes.`);
+      }
+
+      // 7. item() - Returns the class at the specified index
+      function showItem() {
+        const firstClass = target.classList.item(0);
+        logMessage(`Class at index 0 is: '${firstClass}'`);
+      }
+
+      // 8. Iteration (forEach)
+      function iterateClasses() {
+        let classesList = [];
+        target.classList.forEach((className, index) => {
+          classesList.push(`[${index}]: ${className}`);
+        });
+        logMessage(`Iterating:\n${classesList.join('\n')}`);
+      }
+
+      // Utility to reset
+      function resetElement() {
+        target.className = 'box base-class';
+        logMessage('Reset attributes directly via target.className');
+      }
+      
+      // Initial log
+      logMessage('Interactive classList playground ready!');
+    </script>
+  </body>
+</html>
