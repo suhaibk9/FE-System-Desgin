@@ -1,0 +1,32 @@
+body {
+  padding: 0;
+  margin: 0;
+
+}
+.tabContent {
+  display: none;
+}
+
+.tabLinks {
+  padding: 10px;
+  margin: 2px;
+  background-color: #1976d2; /* modern blue */
+  color: #fff;
+  transition: background 0.2s;
+}
+
+.tabLinks:hover {
+  background-color: #115293; /* darker blue on hover */
+  color: #fff;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  cursor: pointer;
+}
+.tabLinks.active {
+  background-color: #115293;
+  transform: scale(0.97);
+}
+
+.tabContent.active {
+  display: block;
+}
