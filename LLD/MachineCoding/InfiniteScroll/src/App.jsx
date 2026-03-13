@@ -44,7 +44,7 @@ const App = () => {
         document.body.offsetHeight
       ) {
         // Trigger fetch only if NOT currently loading
-        if (!loading) {
+        if (!loading && products.limit < products.total) {
           fetchProducts();
         }
       }
