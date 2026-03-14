@@ -16,6 +16,10 @@ body {
   border-radius: 20px;
   position: relative;
 }
+.progress:focus-visible {
+  outline: 2px solid #000;
+  outline-offset: 4px;
+}
 .progress-fill {
   position: absolute;
   left: 0;

@@ -1,6 +1,13 @@
 const ProgressBar = ({ value = 0 }) => {
   return (
-    <div className="progress">
+    <div 
+      className="progress"
+      role="progressbar"
+      aria-valuenow={value}
+      aria-valuemin={0}
+      aria-valuemax={100}
+      tabIndex={0}
+    >
       <div
         className="progress-fill"
         style={{
@@ -11,7 +18,7 @@ const ProgressBar = ({ value = 0 }) => {
           transition: "width 0.3s"
         }}
       ></div>
-      <span>{value.toFixed()}%</span>
+      <span aria-hidden="true">{value.toFixed()}%</span>
     </div>
   );
 };
