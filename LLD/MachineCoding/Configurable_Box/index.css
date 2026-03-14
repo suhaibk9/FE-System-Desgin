@@ -1,0 +1,14 @@
+.body {
+  padding: 0px;
+  margin: 0px;
+}
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.box {
+  cursor: pointer;
+  height: 100px;
+  margin-bottom: 10px;
+}
