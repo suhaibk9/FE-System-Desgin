@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pagination__item {
+  min-width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  padding: 0 0.75rem;
+  background: #ffffff;
+  color: #111827;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.pagination__item:hover {
+  background: #f9fafb;
+}
+
+.pagination_selected {
+  background: #111827;
+  color: #ffffff;
+  border-color: #111827;
+}
+
+.pagination__ellipsis {
+  padding: 0 0.25rem;
+  color: #6b7280;
+  user-select: none;
+}

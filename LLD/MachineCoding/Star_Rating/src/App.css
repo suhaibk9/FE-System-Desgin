@@ -1,0 +1,7 @@
+.star-rating,
+.current-rating {
+  font-size: 30px;
+}
+.star {
+  cursor: pointer;
+}
